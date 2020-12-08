@@ -66,7 +66,7 @@ echo "[+] Done."
 
 echo "[+] Installing SubDomainizer."
 git clone  https://github.com/nsonaniya2010/SubDomainizer.git  > /dev/null 2>&1
-pip3 -q install -r subdomanizer/requirements.txt > /dev/null 2>&1
+pip3 -q install -r SubDomainizer/requirements.txt > /dev/null 2>&1
 echo "[+] Done"
 
 echo "[+] Installing subdomains-scanner."
@@ -151,7 +151,7 @@ GO111MODULE=on go get -u github.com/projectdiscovery/httpx/cmd/httpx > /dev/null
 echo "[+] Done."
 
 echo "[+] Downloading wordlist for dns-bruteforcing."
-wget -q https://s3.amazonaws.com/assetnote-wordlists/data/manual/best-dns-wordlist.txt -P ./bugbounty/tools/
+wget -q https://s3.amazonaws.com/assetnote-wordlists/data/manual/best-dns-wordlist.txt
 echo "[+] Done."
 
 echo "[+] Installing webanalyze"
@@ -179,7 +179,7 @@ echo "[+] Installing waybackurls"
 go get github.com/tomnomnom/waybackurls
 
 echo "[+]Adding api keys in subfinder config file."
-
+touch ~/.config/subfinder/config.yaml
 line=$(cat -n ~/.config/subfinder/config.yaml|grep binaryedge: |awk '{print $1}')
 echo $line
 sed -i "${line},\$d" ~/.config/subfinder/config.yaml 
