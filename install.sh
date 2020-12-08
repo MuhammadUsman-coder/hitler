@@ -5,6 +5,7 @@ echo "[+] All tools will be installed in ~/tools."
 mkdir ~/tools
 cd ~/tools
 sudo apt-get -y update
+sudo apt install -y git python3 python3-pip curl wget
 
 if ! [ -x "$(command -v go)" ];then 
   echo "go not installed";
@@ -154,7 +155,7 @@ wget -q https://s3.amazonaws.com/assetnote-wordlists/data/manual/best-dns-wordli
 echo "[+] Done."
 
 echo "[+] Installing webanalyze"
-go get -v -u github.com/rverton/webanalyze/cmd/webanalyze
+go get -u github.com/rverton/webanalyze/cmd/webanalyze
 webanalyze -update
 
 echo "[+] Installing unfurl."
@@ -162,12 +163,20 @@ go get -u github.com/tomnomnom/unfurl
 
 echo "[+] Installing github-subdomain search."
 git clone https://github.com/gwen001/github-search.git
-pip3 install -r requirements2.txt
-pip3 install -r requirements2.txt
+pip3 install -r github-search/requirements2.txt
+pip3 install -r github-search/requirements2.txt
 
 echo "[+] Installing crobat for subdomain enumeration."
 go get -u github.com/cgboal/sonarsearch/crobat
 
+echo "[+] Install crlfuzz"
+GO111MODULE=on go get -v github.com/dwisiswant0/crlfuzz/cmd/crlfuzz
+
+echo "[+] Installing corsme"
+go get -u -v github.com/shivangx01b/CorsMe
+
+echo "[+] Installing waybackurls"
+go get github.com/tomnomnom/waybackurls
 
 echo "[+]Adding api keys in subfinder config file."
 
