@@ -22,6 +22,7 @@ if ! [ -x "$(command -v go)" ];then
   source ~/.bash_profile
 fi
 
+
 # if ! [ -d ~/go ];then
 #   echo "go directory not found in home directory."
 # fi
@@ -31,7 +32,6 @@ sudo apt install -y snapd
 sudo snap install amass
 fi 
 
-if ! [ -x "$(command -v sublist3r)" ];then 
 echo "[+] Installing Sublist3r"
 git clone https://github.com/aboul3la/Sublist3r.git
 cd Sublist3r*
@@ -41,7 +41,7 @@ sudo pip3 install requests
 sudo pip3 install dnspython
 sudo pip3 install argparse
 echo "[+] Done"
-fi;
+
 
 echo "[+] downloading v-Host wordlist."
 curl https://raw.githubusercontent.com/codingo/VHostScan/master/VHostScan/wordlists/virtual-host-scanning.txt > v-host.txt
@@ -52,8 +52,8 @@ curl https://raw.githubusercontent.com/codingo/VHostScan/master/VHostScan/wordli
 # source ~/.profile
 
 echo "[+] Installing findSubdomains."
-git clone https://github.com/starnightcyber/findSubDomains.git > /dev/null 2>&1
-python3 -m pip install -r findSubDomains/requirements.txt > /dev/null 2>&1
+wget https://github.com/Edu4rdSHL/findomain/releases/latest/download/findomain-linux
+chmod +x findomain-linux
 echo "[+] Done."
 
 echo "[+] Installing subscraper."

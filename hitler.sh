@@ -3,93 +3,95 @@
 target=$1;
 
 echo "[+] Checking tools required for subdomain enumeration."
-echo "[+] Making directory to install tools, all tools that required repositories to be cloned will be made in ./bugbounty/tools"
 
 # for i in {"./bugbounty/$target/recon/subdomain/"};do
 #         mkdir -p $i;
 # done
 
-mkdir -p ./bugbounty/$target/recon/subdomain/
+mkdir -p ./bugbounty/$target/detail-recon/subdomains/
+mkdir -p ./bugbounty/$target/summary-recon/
+
 echo "[+] Starting subdomain enumeration."
 
 echo "[+] Starting sublist3r for subdomain enumeration."
-sublist3r -d "$target"  > ./bugbounty/$target/recon/subdomain/sublist3r.txt
+python3 ~/tools/Sublist3r/sublist3r.py -d "$target"  > ./bugbounty/$target/detail-recon/subdomains/sublist3r.txt
 
 echo "[+] Starting amass for subdomain enumeration."
-amass enum -passive -d "$target" > ./bugbounty/$target/recon/subdomain/amass.txt
+amass enum -passive -d "$target" > ./bugbounty/$target/detail-recon/subdomains/amass.txt
 
 echo "[+] Starting find-domain for subdomain enumeration."
-python3 ~/tools/findSubDomains/findSubDomains.py "$target" -t 200 > ./bugbounty/$target/recon/subdomain/findSubs.txt
+~/tools/findomain-linux  -t "$target" -u ./bugbounty/$target/detail-recon/subdomain/findomain.txt
 
 echo "[+] Running subscraper for subdomain enumeration."
-subscraper -t 100 "$target" --censys-api "29c6e13b-bdd2-46d8-b6b7-1f679b4ee70d" --censys-secret "CfEDWOxM2OLR8CYzfNnK0V46E2oLcokd"| grep "$target" |cut -f1 | grep "$target"| awk '{print $2}'  > ./bugbounty/$target/recon/subdomain/subscraper.txt
+subscraper -t 100 "$target" --censys-api "29c6e13b-bdd2-46d8-b6b7-1f679b4ee70d" --censys-secret "CfEDWOxM2OLR8CYzfNnK0V46E2oLcokd"| grep "$target" |cut -f1 | grep "$target"| awk '{print $2}'  > ./bugbounty/$target/detail-recon/subdomain/subscraper.txt
 
 echo "[+] Running SubDomainizer for subdomain enumeration."
-python3 ~/tools/SubDomainizer/SubDomainizer.py -u http://$target -o  ./bugbounty/$target/recon/subdomain/subdominizer.txt > /dev/null 2>&1
+python3 ~/tools/SubDomainizer/SubDomainizer.py -u http://$target -o  ./bugbounty/$target/detail-recon/subdomain/subdominizer.txt > /dev/null 2>&1
 
 echo "[+] Running subdomains-scanner for subdomain enumeration."
-subdomain-scanner -depth 3 -d $target -t 300 -f ~/go/src/github.com/fengdingbo/subdomain-scanner/dict/subnames_full.txt -o ./bugbounty/$target/recon/subdomain/subdomain-scanner.txt 
+subdomain-scanner -depth 3 -d "$target" -t 300 -f ~/go/src/github.com/fengdingbo/subdomain-scanner/dict/subnames_full.txt -o ./bugbounty/$target/detail-recon/subdomain/subdomain-scanner.txt 
 
 echo "[+] Running chaos for subdomain enumeration."
 export CHAOS_KEY="a01b4a1eae3ec7ea5293318487e2aa83208c428103740e553ddde3bac8e412d1"
-chaos -d $target -silent|grep $target > ./bugbounty/$target/recon/subdomain/chaos.txt
+chaos -d "$target" -silent|grep "$target" > ./bugbounty/$target/detail-recon/subdomain/chaos.txt
 
 echo "[+] Running assetfinder for subdomain enumeration."
-assetfinder --subs-only $target > ./bugbounty/$target/recon/subdomain/assetfinder.txt
+assetfinder --subs-only "$target" > ./bugbounty/$target/detail-recon/subdomain/assetfinder.txt
 
 echo "[+] Running delator for subdomain enumeration."
-delator -d $target -s crt > ./bugbounty/$target/recon/subdomain/delator.txt
+delator -d "$target" -s crt > ./bugbounty/$target/detail-recon/subdomain/delator.txt
 
 echo "[+] Running vita for subdomain enumeration."
-~/tools/vita/vita-0.1.14-x86_64-unknown-linux-musl/vita -d $target -c 300 > ./bugbounty/$target/recon/subdomain/vita.txt
+~/tools/vita/vita-0.1.14-x86_64-unknown-linux-musl/vita -d "$target" -c 300 > ./bugbounty/$target/detail-recon/subdomain/vita.txt
 
 echo "[+] Running subfinder for subdomain enumeration."
-subfinder -silent -d $target -t 50 > ./bugbounty/$target/recon/subdomain/subfinder.txt
+subfinder -silent -d "$target" -t 50 > ./bugbounty/$target/detail-recon/subdomain/subfinder.txt
 
 echo "[+] Running nmap dns-bruteforcing for subdomain enumeration."
-nmap --script dns-brute $target | grep $target |tail -n +3 | cut -c 7- | cut -f1 -d ' '| uniq > ./bugbounty/$target/recon/subdomain/nmap.txt
+nmap --script dns-brute "$target" | grep "$target" |tail -n +3 | cut -c 7- | cut -f1 -d ' '| uniq > ./bugbounty/$target/detail-recon/subdomain/nmap.txt
 
 echo "[+] Running dnscan for subdomain enumeration."
-python3 ~/tools/dnscan/dnscan.py -t 32 -d $target -w ./bugbounty/tools/dnscan/subdomains-10000.txt  -n -t 50  | grep .$target | tail -n +3 | cut -f3 -d ' ' > /dev/null 2>&1
+python3 ~/tools/dnscan/dnscan.py -t 32 -d "$target" -w ~/tools/dnscan/subdomains-10000.txt  -n -t 50  | grep "$target" | tail -n +3 | cut -f3 -d ' ' > ./bugbounty/$target/detail-recon/subdomain/dnscam.txt
 
-#echo "[+] Running rush with seclist for subdomain enumeration."
-#rush -j200 -i ./bugbounty/tools/best-dns-wordlist.txt  ' curl -s -L "https://dns.google.com/resolve?name={}."'"$target.com"'"&type=A&cd=true" | sed "s#\"#\n# g;s# #\n#g" | grep "'"$target"'"' | sed ' s#\.$##g' |httpx| anew ./bugbounty/$target/recon/subdomain/rush.txt
-cat ./bugbounty/$target/recon/subdomain/* |sort -u > ./bugbounty/$target/recon/subdomain/subs.txt
+# echo "[+] Running rush with seclist for subdomain enumeration."
+# rush -j200 -i ~/tools/best-dns-wordlist.txt  ' curl -s -L "https://dns.google.com/resolve?name={}."'"$target.com"'"&type=A&cd=true" | sed "s#\"#\n# g;s# #\n#g" | grep "'"$target"'"' | sed ' s#\.$##g' |httpx| anew ./bugbounty/$target/detail-recon/subdomain/rush.txt
 
 echo "[+] Starting github-subdomain.py for subdomain enumeration."
-pytho3 github-search/github-subdomains.py -t e5ee760a9e3e84b42282bf7d744dca095b7f9c34  -d "$target" > ./bugbounty/$target/recon/subdomain/github-subdomains.txt
+pytho3 ~/tools/github-search/github-subdomains.py -t e5ee760a9e3e84b42282bf7d744dca095b7f9c34  -d "$target" > ./bugbounty/$target/detail-recon/subdomain/github-subdomains.txt
+
+cat ./bugbounty/$target/detail-recon/subdomain/* | sort -u > ./bugbounty/$target/detail-recon/subdomain/subs.txt
 
 echo "[+] Starting crobat for subdomain enumeration."
-crobat -s "$target"
+crobat -s "$target" > ./bugbounty/$target/detail-recon/subdomain/crobat.txt
 
 echo "[+] Getting DNS SOA records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -soa -o ./bugbounty/$target/recon/subdomain/soa.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -soa -o ./bugbounty/$target/detail-recon/subdomain/soa.txt
 
 echo "[+] Getting DNS MX records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -mx -o ./bugbounty/$target/recon/subdomain/mx.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -mx -o ./bugbounty/$target/detail-recon/subdomain/mx.txt
 
 echo "[+] Getting DNS TXT records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -txt -o ./bugbounty/$target/recon/subdomain/txt.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -txt -o ./bugbounty/$target/detail-recon/subdomain/txt.txt
 
 echo "[+] Getting DNS PTR records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -ptr -o ./bugbounty/$target/recon/subdomain/ptr.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -ptr -o ./bugbounty/$target/detail-recon/subdomain/ptr.txt
 
 echo "[+] Getting DNS NS records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -ns -o ./bugbounty/$target/recon/subdomain/ns.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -ns -o ./bugbounty/$target/detail-recon/subdomain/ns.txt
 
 echo "[+] Getting DNS A records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -a -o ./bugbounty/$target/recon/subdomain/a.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -a -o ./bugbounty/$target/detail-recon/subdomain/a.txt
 
 echo "[+] Getting DNS AAAA records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -aaaa -o ./bugbounty/$target/recon/subdomain/aaaa.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -aaaa -o ./bugbounty/$target/detail-recon/subdomain/aaaa.txt
 
 echo "[+] Getting DNS CNAME records."
-dnsx -t 400 -silent -l ./bugbounty/$target/recon/subdomain/subs.txt -cname -o ./bugbounty/$target/recon/subdomain/cname.txt
+dnsx -t 400 -silent -l ./bugbounty/$target/detail-recon/subdomain/subs.txt -cname -o ./bugbounty/$target/detail-recon/subdomain/cname.txt
 
-cat ./bugbounty/$target/recon/subdomain/* | sort -u > ./bugbounty/$target/recon/subdomain/final2_subs.txt
+cat ./bugbounty/$target/detail-recon/subdomain/* | sort -u > ./bugbounty/$target/detail-recon/subdomain/subs2.txt
 
 echo "[+] Starting shuffle dns to enumerate valid subdomains."
-shuffledns -silent -list ./bugbounty/$target/recon/subdomain/final2_subs.txt  -r ~/tools/resolvers.txt -o ./bugbounty/$target/recon/subdomain/shuffledns.txt
+shuffledns -silent -list ./bugbounty/$target/detail-recon/subdomains/subs2.txt  -r ~/tools/resolvers.txt -o ./bugbounty/$target/detail-recon/subdomain/shuffledns.txt
 
 #echo "[+] Starting ffuf for vhost bruteforce."
 #ffuf -w wordlist -u http://"$target"/ -H "Host:http://FUZZ.$target" -k -mc 200,204,301,302,307,401,403,500,404 -t 50 -o ./bugbounty/$target/recon/subdomain/vhost.txt
