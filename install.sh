@@ -5,11 +5,11 @@ echo "[+] All tools will be installed in ~/tools."
 mkdir ~/tools
 cd ~/tools
 sudo apt-get -y update
-sudo apt install -y git python3 python3-pip curl wget
+sudo apt install -y sudo git python python3 python3-pip curl unzip wget
 
 if ! [ -x "$(command -v go)" ];then 
-  echo "go not installed";
-  echo "Installing Golang"
+  echo "[+] Go not installed";
+  echo "[+] Installing Golang"
   wget https://golang.org/dl/go1.15.6.linux-amd64.tar.gz
   sudo tar -xf go1.15.6.linux-amd64.tar.gz
   sudo mv go /usr/local
@@ -26,11 +26,9 @@ fi
 # if ! [ -d ~/go ];then
 #   echo "go directory not found in home directory."
 # fi
-
-if ! [ -x "$(command -v amass)" ];then 
-sudo apt install -y snapd 
-sudo snap install amass
-fi 
+echo "[+] Installing amass."
+wget https://github.com/OWASP/Amass/releases/download/v3.10.5/amass_linux_amd64.zip
+unzip amass*
 
 echo "[+] Installing Sublist3r"
 git clone https://github.com/aboul3la/Sublist3r.git
@@ -172,6 +170,9 @@ go get -u github.com/cgboal/sonarsearch/crobat
 echo "[+] Install crlfuzz"
 GO111MODULE=on go get -v github.com/dwisiswant0/crlfuzz/cmd/crlfuzz
 
+echo "[+] Installing GAU."
+GO111MODULE=on go get -u -v github.com/lc/gau
+
 echo "[+] Installing corsme"
 go get -u -v github.com/shivangx01b/CorsMe
 
@@ -179,6 +180,7 @@ echo "[+] Installing waybackurls"
 go get github.com/tomnomnom/waybackurls
 
 echo "[+]Adding api keys in subfinder config file."
+subfinder --help > /dev/null
 touch ~/.config/subfinder/config.yaml
 line=$(cat -n ~/.config/subfinder/config.yaml|grep binaryedge: |awk '{print $1}')
 echo $line
