@@ -179,44 +179,45 @@ go get -u -v github.com/shivangx01b/CorsMe
 echo "[+] Installing waybackurls"
 go get github.com/tomnomnom/waybackurls
 
-echo "[+]Adding api keys in subfinder config file."
-subfinder --help > /dev/null
-touch ~/.config/subfinder/config.yaml
-line=$(cat -n ~/.config/subfinder/config.yaml|grep binaryedge: |awk '{print $1}')
-echo $line
-sed -i "${line},\$d" ~/.config/subfinder/config.yaml 
-echo """
-binaryedge:
-  - b63cc93b-5b72-426d-8141-7a22d4927305
-censys:
-  - 29c6e13b-bdd2-46d8-b6b7-1f679b4ee70d:CfEDWOxM2OLR8CYzfNnK0V46E2oLcokd
-certspotter:
-  - 32919_sMCauuiKvIWuWRmdGZll
-chaos:
-  - a01b4a1eae3ec7ea5293318487e2aa83208c428103740e553ddde3bac8e412d1
-dnsdb:
-  - 2f4a5083f44ce5702a7c86f770ed157f3eb98d519ea46ab4c5bed7239e8c660d
-github:
-  - deb5b594aa1ff575f8117f42dd5d3e8b16379473
-intelx:
-  - 57cd7cac-0dfe-4254-ab3e-524a690c3867
-passivetotal:
-  - 6b12dc7b8ddb20b42f59a0398d5fe31ba4beb247464602f9ce50d4de71ff8bc7
-recon: []
-robtex:
-  - 51BHtnjT9TfRONnE1ud8
-securitytrails:
-  - UAwTto0HEx60SUpX6lS6Qd8gfvLKjwbk
-shodan:
-  - jQIqdSSf8czWjZcF1EHzfPtyLQGfxpOE
-spyse:
-  - b60e4d57-f03a-4820-a8c6-49e94a257e13
-threatbook: []
-urlscan:
-  - 7c858bcf-d91b-478e-bb3e-518420fcbf19
-virustotal:
-  - 535864afe283421ea46b62ad6c2174a0d1cf7dd850a2ce38d02cb9136f24895e
-zoomeye:
-  - 26382A3A-6162-c2693-6631-dc25d62ff6f
-subfinder-version: 2.4.5
-""" >> ~/.config/subfinder/config.yaml
+echo "[+] Please configure subfinder keys by running the following lines in script."
+# echo "[+]Adding api keys in subfinder config file."
+# subfinder --help > /dev/null
+# touch ~/.config/subfinder/config.yaml
+# line=$(cat -n ~/.config/subfinder/config.yaml|grep binaryedge: |awk '{print $1}')
+# echo $line
+# sed -i "${line},\$d" ~/.config/subfinder/config.yaml 
+# echo """
+# binaryedge:
+#   - b63cc93b-5b72-426d-8141-7a22d4927305
+# censys:
+#   - 29c6e13b-bdd2-46d8-b6b7-1f679b4ee70d:CfEDWOxM2OLR8CYzfNnK0V46E2oLcokd
+# certspotter:
+#   - 32919_sMCauuiKvIWuWRmdGZll
+# chaos:
+#   - a01b4a1eae3ec7ea5293318487e2aa83208c428103740e553ddde3bac8e412d1
+# dnsdb:
+#   - 2f4a5083f44ce5702a7c86f770ed157f3eb98d519ea46ab4c5bed7239e8c660d
+# github:
+#   - deb5b594aa1ff575f8117f42dd5d3e8b16379473
+# intelx:
+#   - 57cd7cac-0dfe-4254-ab3e-524a690c3867
+# passivetotal:
+#   - 6b12dc7b8ddb20b42f59a0398d5fe31ba4beb247464602f9ce50d4de71ff8bc7
+# recon: []
+# robtex:
+#   - 51BHtnjT9TfRONnE1ud8
+# securitytrails:
+#   - UAwTto0HEx60SUpX6lS6Qd8gfvLKjwbk
+# shodan:
+#   - jQIqdSSf8czWjZcF1EHzfPtyLQGfxpOE
+# spyse:
+#   - b60e4d57-f03a-4820-a8c6-49e94a257e13
+# threatbook: []
+# urlscan:
+#   - 7c858bcf-d91b-478e-bb3e-518420fcbf19
+# virustotal:
+#   - 535864afe283421ea46b62ad6c2174a0d1cf7dd850a2ce38d02cb9136f24895e
+# zoomeye:
+#   - 26382A3A-6162-c2693-6631-dc25d62ff6f
+# subfinder-version: 2.4.5
+# """ >> ~/.config/subfinder/config.yaml
