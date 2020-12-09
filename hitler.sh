@@ -155,28 +155,28 @@ echo "[+] Starting webanalyze for technologies enumeration."
 webanalyze -apps ~/tools/apps.json -hosts ./bugbounty/$target/summary-recon/subdomains.txt -crawl 1 -silent -worker 20 > ./bugbounty/$target/summary-recon/webanalyze.txt
 
 echo "[+] Starting GAU for link enumeration."
-cat $links | sed 's/https\?:\/\///' | gau > ./bugbounty/$target/detail-recon/getallurls.txt
+cat $links | sed 's/https\?:\/\///' | gau > ./bugbounty/$target/detail-recon/spidering/getallurls.txt
 
 echo "[+] Starting unfurl for param mining."
-cat ./bugbounty/$target/detail-recon/getallurls.txt | sort -u | unfurl --unique keys > ./bugbounty/$target/summary-recon/paramlist.txt
+cat ./bugbounty/$target/detail-recon/spidering/getallurls.txt | sort -u | unfurl --unique keys > ./bugbounty/$target/summary-recon/paramlist.txt
 
 echo "[+] Extracting js files."
-cat ./bugbounty/$target/detail-recon/getallurls.txt | sort -u | grep -P "\w+\.js(\?|$)" | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u > ./bugbounty/$target/summary-recon/links/jsurls.txt
+cat ./bugbounty/$target/detail-recon/spidering/getallurls.txt | sort -u | grep -P "\w+\.js(\?|$)" | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u > ./bugbounty/$target/summary-recon/links/jsurls.txt
 
 echo "[+] Extracting php files."
-cat ./bugbounty/$target/detail-recon/getallurls.txt | sort -u | grep -P "\w+\.php(\?|$)" | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u  > ./bugbounty/$target/summary-recon/links/phpurls.txt
+cat ./bugbounty/$target/detail-recon/spidering/getallurls.txt | sort -u | grep -P "\w+\.php(\?|$)" | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u  > ./bugbounty/$target/summary-recon/links/phpurls.txt
 
 echo "[+] Extracting aspx files."
-cat ./bugbounty/$target/detail-recon/getallurls.txt | sort -u | grep -P "\w+\.aspx(\?|$) | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u " > ./bugbounty/$target/summary-recon/links/aspxurls.txt
+cat ./bugbounty/$target/detail-recon/spidering/getallurls.txt | sort -u | grep -P "\w+\.aspx(\?|$) | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u " > ./bugbounty/$target/summary-recon/links/aspxurls.txt
 
 echo "[+] Extracting jsp files."
-cat ./bugbounty/$target/detail-recon/getallurls.txt | sort -u | grep -P "\w+\.jsp(\?|$) | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u " > ./bugbounty/$target/summary-recon/links/jspurls.txt
+cat ./bugbounty/$target/detail-recon/spidering/getallurls.txt | sort -u | grep -P "\w+\.jsp(\?|$) | httpx -silent -status-code -mc 200 | awk '{print $1}' | sort -u " > ./bugbounty/$target/summary-recon/links/jspurls.txt
 
 echo "[+] Starting CorsMe for cors misconfiguration detection."
 cat $links | CorsMe -t 70 > ./bugbounty/$target/scanning/corsme.txt
 
 echo "[+] Starting crlfuzz."
-crlfuzz -l ./bugbounty/$target/detail-recon/getallurls.txt -s > ./bugbounty/$target/scanning/crlfuzz.txt
+crlfuzz -l ./bugbounty/$target/detail-recon/spidering/getallurls.txt -s > ./bugbounty/$target/scanning/crlfuzz.txt
 
 
 
