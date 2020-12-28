@@ -179,4 +179,22 @@ echo "[+] Starting crlfuzz."
 crlfuzz -l ./bugbounty/$target/detail-recon/spidering/getallurls.txt -s > ./bugbounty/$target/scanning/crlfuzz.txt
 
 
+echo "[+] Starting metabigor"
+echo 'shuftipro.com' | metabigor net --org -v
 
+echo "[+] Extracting asn numbers"
+curl -s https://www.ultratools.com/tools/asnInfoResult?domainName=cisco|egrep  -o 'AS[0-9]+'
+
+
+echo "[+] Getting ips from view-dns"
+curl "https://api.viewdns.info/iphistory/?domain=shuftipro.com&apikey=3191026f942e0bd934218ca68bd408a13fdf5337&output=xml"|grep -oE '[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}'
+
+echo "[+] Checking asn numbers found"
+https://ipinfo.io/asn123123
+
+
+echo "[+] Starting FavFreak"
+cat urls.txt | python3 favfreak.py 
+
+echo "[+] Starting subrute"
+./subbrute.py all.txt corp.google.com |massdns -r resolvers.txt -t A -a -o -w gcorp.txt -"

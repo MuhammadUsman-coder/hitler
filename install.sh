@@ -179,6 +179,26 @@ go get -u -v github.com/shivangx01b/CorsMe
 echo "[+] Installing waybackurls"
 go get github.com/tomnomnom/waybackurls
 
+echo "[+] Installing metabigor"
+go get -u github.com/j3ssie/metabigor
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo apt install ./google-chrome-stable_current_amd64.deb
+
+echo "[+] Insatlling asnlookup"
+git clone https://github.com/yassineaboukir/Asnlookup && cd Asnlookup
+pip3 install -r requirements.txt 
+cd ..
+
+echo "Insatlling FavFrek."
+git clone https://github.com/devanshbatham/FavFreak
+cd FavFreak
+virtualenv -p python3 env
+source env/bin/activate
+python3 -m pip install mmh3
+
+
+
 echo "[+] Please configure subfinder keys by running the following lines in script."
 # echo "[+]Adding api keys in subfinder config file."
 # subfinder --help > /dev/null
