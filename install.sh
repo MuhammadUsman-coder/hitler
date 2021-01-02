@@ -55,22 +55,22 @@ chmod +x findomain-linux
 echo "[+] Done."
 
 echo "[+] Installing subscraper."
-git clone https://github.com/m8r0wn/subscraper  > /dev/null 2>&1
-pip3 -q install -r subscraper/requirements.txt  > /dev/null 2>&1
+git clone https://github.com/m8r0wn/subscraper 
+pip3 -q install -r subscraper/requirements.txt 
 cd subscraper/
-python3 setup.py install > /dev/null 2>&1
+python3 setup.py install 
 cd ..;
 echo "[+] Done."
 
 echo "[+] Installing SubDomainizer."
-git clone  https://github.com/nsonaniya2010/SubDomainizer.git  > /dev/null 2>&1
-pip3 -q install -r SubDomainizer/requirements.txt > /dev/null 2>&1
+git clone  https://github.com/nsonaniya2010/SubDomainizer.git  
+pip3 -q install -r SubDomainizer/requirements.txt 
 echo "[+] Done"
 
 echo "[+] Installing subdomains-scanner."
-go get github.com/miekg/dns > /dev/null 2>&1
-go get github.com/hashicorp/go-multierror > /dev/null 2>&1
-go get github.com/fengdingbo/subdomain-scanner > /dev/null 2>&1
+go get github.com/miekg/dns 
+go get github.com/hashicorp/go-multierror 
+go get github.com/fengdingbo/subdomain-scanner 
 make -C ~/go/src/github.com/fengdingbo/subdomain-scanner/ 
 echo "[+] Done"    
  
@@ -79,7 +79,7 @@ go get -u github.com/tomnomnom/assetfinder
 echo "[+] Done."
 
 echo "[+] Installing chaos."
-GO111MODULE=on go get -u github.com/projectdiscovery/chaos-client/cmd/chaos
+GO111MODULE=on go get  github.com/projectdiscovery/chaos-client/cmd/chaos
 echo "[+] Done."
 
 echo "[+] Installing delator."
@@ -101,15 +101,15 @@ tar -xf vita-0.1.14-x86_64-unknown-linux-musl.tar.gz
 echo "[+] Done."
 
 echo "[+] Installing subfinder."
-GO111MODULE=on go get -u -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+GO111MODULE=on go get -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
 echo "[+] Done."
 
 echo "[+] Installing dnsx."
-GO111MODULE=on go get -u -v github.com/projectdiscovery/dnsx/cmd/dnsx
+GO111MODULE=on go get -v github.com/projectdiscovery/dnsx/cmd/dnsx
 echo "[+] Done."
 
 echo "[+] Installing shuffledns"
-GO111MODULE=on go get -u -v github.com/projectdiscovery/shuffledns/cmd/shuffledns
+GO111MODULE=on go get -v github.com/projectdiscovery/shuffledns/cmd/shuffledns
 echo "[+] Done."
 
 echo "[+] Downloading resolvers.txt for shuffledns."
@@ -140,12 +140,12 @@ sudo apt install nmap -y
 echo "[+] Done."
 
 echo "[+] Installing dnscan."
-git  clone https://github.com/rbsec/dnscan.git  > /dev/null 2>&1
-pip3 -q install -r dnscan/requirements.txt > /dev/null 2>&1
+git  clone https://github.com/rbsec/dnscan.git  
+pip3 -q install -r dnscan/requirements.txt 
 echo "[+] Done"
 
 echo "[+] Installing httpx"
-GO111MODULE=on go get -u github.com/projectdiscovery/httpx/cmd/httpx > /dev/null 2>&1
+GO111MODULE=on go get -v github.com/projectdiscovery/httpx/cmd/httpx
 echo "[+] Done."
 
 echo "[+] Downloading wordlist for dns-bruteforcing."
@@ -182,6 +182,8 @@ go get github.com/tomnomnom/waybackurls
 echo "[+] Installing metabigor"
 go get -u github.com/j3ssie/metabigor
 
+
+echo "[+] Installing chrome"
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo apt install ./google-chrome-stable_current_amd64.deb
 
