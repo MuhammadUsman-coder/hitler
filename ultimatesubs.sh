@@ -46,9 +46,6 @@ nmap --script dns-brute "$target" | grep "$target" |tail -n +3 | cut -c 7- | cut
 echo "[+] Running dnscan for subdomain enumeration."
  python3 ~/tools/dnscan/dnscan.py -t 32 -d "$target" -w ~/tools/dnscan/subdomains-10000.txt  -n -t 50  | egrep -o  "\S+$target" > ultimatesubs/dnscan.txt
 
-# echo "[+] Running rush with seclist for subdomain enumeration."
-# rush -j200 -i ~/tools/best-dns-wordlist.txt  ' curl -s -L "https://dns.google.com/resolve?name={}."'"$target.com"'"&type=A&cd=true" | sed "s#\"#\n# g;s# #\n#g" | grep "'"$target"'"' | sed ' s#\.$##g' |httpx| anew ./bugbounty/$target/detail-recon/subdomain/rush.txt
-
 echo "[+] Starting github-subdomain.py for subdomain enumeration."
 python3 ~/tools/github-search/github-subdomains.py -t e5ee760a9e3e84b42282bf7d744dca095b7f9c34  -d "$target" > ultimatesubs/github-subdomains.txt
 
@@ -84,15 +81,18 @@ dnsx -t 400 -silent -l ultimatesubs/subs.txt -cname -o ultimatesubs/cname.txt
 cat ultimatesubs/* | sort -u > ultimatesubs/subs2.txt
 
 echo "[+] Starting shuffle dns to enumerate valid subdomains."
-shuffledns -silent -list ultimatesubs/subs2.txt  -r ~/tools/resolvers.txt -o ultimatesubs/shuffledns.txt
+shuffledns -d $target -silent -w ~/tools/best-dns-wordlist.txt -r ~/tools/resolvers.txt -o ultimatesubs/shuffledns.txt
 
 echo "[+] Starting ffuf for vhost bruteforce."
-ffuf -w ~/tools/v-host.txt -u http://"$target"/ -H "Host:http://FUZZ.$target" -k -mc 200,204,301,302,307,401,500,404 -t 50 -or ultimatesubs/vhost.txt
+gobuster vhost -q -u verizon.com -w ../all.txt -t 50 |grep "Status: 200" > ultimatesubs/vhost.txt
 
 cat ultimatesubs/* | sort -u > ultimatesubs/allsubdomains.txt
 
 echo "[+] Starting httpx for alive subdomains check."
 cat ultimatesubs/allsubdomains.txt |httpx -threads 300 -silent -o ultimatesubs/httpx.txt
+
+echo "[+] Starting favfreak."
+cat ultimatesubs/httpx.txt |python3 ~/tools/FavFreak/favfreak.py |sed -n -e '/Detection/,/Summary/ p'  |grep "$target" > ultimatesubs/favfreak.txt
 
 echo "[+] Checking for subdomains redirection."
 a="ultimatesubs/httpx.txt"
@@ -102,4 +102,4 @@ cat $a | while read a; do
     fi
 done
 
-cat ultimatesubs/httpx.txt | cut -d "/" -f3 > subdomains.txt
+cat ultimatesubs/httpx.txt ultimatesubs/favfreak.txt | cut -d "/" -f3 > subdomains.txt

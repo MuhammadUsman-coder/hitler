@@ -116,9 +116,16 @@ echo "[+] Downloading resolvers.txt for shuffledns."
 wget -q https://raw.githubusercontent.com/janmasarik/resolvers/master/resolvers.txt
 echo "[+] Done."
 
+echo "[+] Installing gobuster"
+go get github.com/OJ/gobuster
+
+
 echo "[+] Downloading ffuf."
 go get -u github.com/ffuf/ffuf
 echo "[+] Done."
+
+echo "[+] Downloadig all.txt"
+wget https://gist.githubusercontent.com/jhaddix/86a06c5dc309d08580a018c66354a056/raw/96f4e51d96b2203f19f6381c8c545b278eaa0837/all.txt
 
 echo "[+] Installing subjack."
 go get github.com/haccer/subjack
