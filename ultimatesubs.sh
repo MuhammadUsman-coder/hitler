@@ -84,7 +84,7 @@ echo "[+] Starting shuffle dns to enumerate valid subdomains."
 shuffledns -d $target -silent -w ~/tools/best-dns-wordlist.txt -r ~/tools/resolvers.txt -o ultimatesubs/shuffledns.txt
 
 echo "[+] Starting ffuf for vhost bruteforce."
-gobuster vhost -q -u verizon.com -w ../all.txt -t 50 |grep "Status: 200" > ultimatesubs/vhost.txt
+gobuster vhost -q -u $target -w ../all.txt -t 50 |grep "Status: 200" > ultimatesubs/vhost.txt
 
 cat ultimatesubs/* | sort -u > ultimatesubs/allsubdomains.txt
 
